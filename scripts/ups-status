@@ -1,0 +1,76 @@
+#!/bin/bash
+
+# @author   https://www.reddit.com/user/LookAtMyKeyboard
+
+OUTPUT=$(apcaccess)
+
+status=$(echo "$OUTPUT" | grep "STATUS")
+statusRe="STATUS   : (\S*)"
+
+charge=$(echo "$OUTPUT" | grep "BCHARGE")
+chargeRe='([0-9]+)\.[0-9]? Percent'
+
+timeleft=$(echo "$OUTPUT" | grep "TIMELEFT")
+timeleftRe='([0-9]+)\.[0-9]? Minutes'
+
+outage=$(echo "$OUTPUT" | grep "LASTXFER")
+outageRe="LASTXFER : (.*)"
+
+[[ $status =~ $statusRe ]]
+status=${BASH_REMATCH[1]}
+
+[[ $charge =~ $chargeRe ]]
+charge=${BASH_REMATCH[1]}
+
+[[ $timeleft =~ $timeleftRe ]]
+timeleft=${BASH_REMATCH[1]}
+
+[[ $outage =~ $outageRe ]]
+outage=${BASH_REMATCH[1]}
+
+if [[ -z $charge ]]
+then
+  charge="0";
+fi
+
+# Making the battery charge progress bar
+chargeBar=""
+
+# 1.1 Input is currentState($1) and totalState($2)
+function ProgressBar {
+    # Process data
+    let _progress=(${1}*20/${2}*20)/20
+    let _done=(${_progress}*20)/20
+    let _left=20-$_done
+
+    # Create loader, use substring to get each side
+    local bar="========${1}%=========="
+    bar=${bar:0:20}
+
+    if [[ $status == "ONLINE" ]]; then
+        bar="[\e[36m${bar:0:_done}\e[2;35m${bar:_done:_left}\e[0m]"
+    else
+        bar="[\e[36m${bar:0:_done}\e[2;35m${bar:_done:_left}\e[0m]"
+    fi
+
+    echo $bar
+}
+
+chargeBar=$(ProgressBar $charge 100)
+
+# verbose output
+#echo -e "\nUPS: $status $chargeBar $timeleft Minutes left\n  Last out: $outage\e[0m"
+
+# minimal output, only outputs warnings if stuff is going wrong
+if [[ $status == "ONLINE" ]]; then
+    echo -e "\nUPS: \e[36mONLINE\e[0m $chargeBar\e[0m"
+else
+    echo -e "\nUPS: \e[31;5mOFFLINE\e[0m $chargeBar $timeleft minutes left\e[0m"
+fi
+
+# if there was an outage that was not a test output the reason
+if [[ $outage != "Automatic or explicit self test" ]]; then
+    echo -e "  Last out: \e[1;33;5m$outage\e[0m"
+fi
+
+
