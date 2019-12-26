@@ -1,6 +1,6 @@
 # motd
 
-This is my personal MOTD, I am accepting contributions now from people who are interested in personalizing their MOTD to make it more interesting.
+This is my personal MOTD, I am accepting contributions now from people who are interested in personalizing their MOTD to make it more interesting. My idea here is to create a minimal motd that has the most amount of information about your system in the least amount of space and gets more verbose only when things fail.
 
 ![image of motd](https://raw.githubusercontent.com/HermannBjorgvin/motd/master/minimal%20motd.png)
 
