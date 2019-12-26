@@ -1,7 +1,7 @@
 #!/bin/bash
 export LANG='en_US.UTF-8'
 
-ssl_domains="hermann.is google.com"
+ssl_domains="hermann.is wikipedia.com"
 currentTime=$(date +%s)
 output="TLS certs|      Valid until"
 
