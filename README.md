@@ -14,6 +14,8 @@ Here is an illustration of this kind of layout:
                                     [============ 4 unit ============]
 [============ 2 unit ============]  [============ 4 unit ============]
 [============ 2 unit ============]  [============ 4 unit ============]
+
+[=========================== spanning unit ==========================]
 ```
 
 Modules I have created for myself:
