@@ -2,7 +2,7 @@
 
 This is my personal MOTD, I am accepting contributions now from people who are interested in personalizing their MOTD to make it more interesting.
 
-![image of motd](./minimal motd.png)
+![image of motd](https://raw.githubusercontent.com/HermannBjorgvin/motd/master/minimal%20motd.png)
 
 My idea for this is to create two column rackmount style layout where each column is 34 characters wide and each unit is 1 line, with 2 spaces between the column this makes the motd 70 characters wide which I found ideal for my personal use.
 
