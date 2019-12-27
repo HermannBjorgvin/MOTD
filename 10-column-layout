@@ -4,7 +4,7 @@ export LANG='en_US.UTF-8'
 color_primary="38;5;45"
 color_secondary="38;5;93"
 
-paste <(/etc/update-motd.d/scripts/falcon-header && /etc/update-motd.d/scripts/ups-status) <(. scripts/zfs/zpool-bar) | column -s $'\t' -tn
+paste <(/etc/update-motd.d/scripts/falcon-header && /etc/update-motd.d/scripts/ups-status) <(. /etc/update-motd.d/scripts/zfs/zpool-bar) | column -s $'\t' -tn
 
 echo ""
 
