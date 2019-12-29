@@ -25,7 +25,9 @@ Modules I have created for myself:
   * Hard disk temperature monitor
   * ZFS zpool space usage
 
-Note that these services are not able to be customized by any configuration parameters, for example the TLS certificate checker basically requires a specific length domain to line up correctly to the 34 character standard.
+To run this locally you should run the `./10-local-testing` file, the `./10-mini-motd` file has absolute paths for `/etc/update-motd.d/` for running in production.  
+
+Take a look at `./10-mini-motd` or `./10-local-testing` to see how I set configuration parameters, not everything is configurable yet but I am working on it (any help is welcome).  
 
 I would also like to thank everyone whos code I used in this project, people on reddit, other repositories, stack overflow snippets.
 
