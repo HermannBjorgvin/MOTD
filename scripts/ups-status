@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# @author   https://www.reddit.com/user/LookAtMyKeyboard
+# A lot of regex matching to get the values I need
 
 OUTPUT=$(apcaccess)
 
@@ -33,6 +33,13 @@ then
   charge="0";
 fi
 
+color_primary=${color_primary:="36"}
+color_full=${color_primary:="36"}
+color_empty=${color_secondary:="35"}
+color_danger=${color_danger:="38;5;1"}
+color_warning=${color_warning:="38;5;11"}
+color_success=${color_success:="38;5;10"}
+
 # Making the battery charge progress bar
 chargeBar=""
 
@@ -48,9 +55,9 @@ function ProgressBar {
     bar=${bar:0:20}
 
     if [[ $status == "ONLINE" ]]; then
-        bar="[\e[36m${bar:0:_done}\e[2;35m${bar:_done:_left}\e[0m]"
+        bar="[\e[${color_full}m${bar:0:_done}\e[${color_empty}m${bar:_done:_left}\e[0m]"
     else
-        bar="[\e[36m${bar:0:_done}\e[2;35m${bar:_done:_left}\e[0m]"
+        bar="[\e[${color_full}m${bar:0:_done}\e[${color_empty}m${bar:_done:_left}\e[0m]"
     fi
 
     echo $bar
@@ -58,19 +65,16 @@ function ProgressBar {
 
 chargeBar=$(ProgressBar $charge 100)
 
-# verbose output
-#echo -e "\nUPS: $status $chargeBar $timeleft Minutes left\n  Last out: $outage\e[0m"
-
 # minimal output, only outputs warnings if stuff is going wrong
 if [[ $status == "ONLINE" ]]; then
-    echo -e "\nUPS: \e[36mONLINE\e[0m $chargeBar\e[0m"
+    echo -e "\nUPS: \e[${color_success}mONLINE\e[0m $chargeBar\e[0m"
 else
-    echo -e "\nUPS: \e[31;5mOFFLINE\e[0m $chargeBar $timeleft minutes left\e[0m"
+    echo -e "\nUPS:\e[5;${color_warning}mOFFLINE\e[0m $chargeBar\e[0m"
 fi
 
 # if there was an outage that was not a test output the reason
 if [[ $outage != "Automatic or explicit self test" ]]; then
-    echo -e "  Last out: \e[1;33;5m$outage\e[0m"
+    echo -e "  Last out: \e[1;5;${color_warning}m$outage\e[0m"
 fi
 
 

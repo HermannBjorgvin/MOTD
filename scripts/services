@@ -1,6 +1,12 @@
 #!/bin/bash
 export LANG='en_US.UTF-8'
 
+color_primary=${color_primary:="36"}
+color_secondary=${color_secondary:="35"}
+color_danger=${color_danger:="38;5;1"}
+color_warning=${color_warning:="38;5;11"}
+color_success=${color_success:="38;5;10"}
+
 # Declare array of services and pretty human readable names
 declare -a services=(
 "smbd"
@@ -32,7 +38,7 @@ width=$((34))
 line=""
 lineLen=0
 
-echo "Services running:"
+echo -e "\e[${color_primary}mServices running\e[0m"
 
 for i in ${!serviceStatus[@]}
 do
@@ -51,9 +57,9 @@ do
 
     # Color the next line green if it's active, else red
     if [[ "${serviceStatus[$i]}" == "active" ]]; then
-    line+="\e[36m● ${serviceName[$i]}\e[0m "
+    line+="\e[${color_success}m●\e[0m ${serviceName[$i]} "
     else
-    line+="\e[1;33m▲ ${serviceName[$i]}\e[0m "
+    line+="\e[1;${color_warning}m▲\e[0m ${serviceName[$i]} "
     fi
 done
 

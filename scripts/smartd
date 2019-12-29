@@ -12,12 +12,13 @@ dim="\e[2m"
 undim="\e[0m"
 
 # only check my zpool
-mapfile -t disks < <(blkid | grep 'LABEL="storage"\|LABEL="haverchuck"' | sed -r 's/^\/dev\/([a-z]{3}).*$/\1 /')
+# mapfile -t disks < <(blkid | grep 'LABEL="storage"\|LABEL="haverchuck"' | sed -r 's/^\/dev\/([a-z]{3}).*$/\1 /')
+disks=$(blkid | grep 'LABEL="storage"\|LABEL="haverchuck"' | sed -r 's/^\/dev\/([a-z]{3}).*$/\1 /')
 
 # use this line if you want to manually specify disks
 #disks=(sda sdb sdc sdd sde sdf sdg sdi)
 
-logfiles='/var/log/syslog /var/log/syslog.1'
+logfiles='/var/log/syslog /var/log/syslog'
 
 # get all lines with smartd entries from syslog
 mapfile -t lines < <(grep -hiP 'smartd\[[[:digit:]]+\]:' $logfiles | grep -iP "(Temperature_Celsius|previous self-test)" | sort -r)

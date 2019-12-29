@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# list of "sda" "sdb" "sdc" disk values
+disks=${disks:-()}
+target_temp=${target_temp:-30}
+color_primary=${color_primary:="36"}
+
+# 6th element is green, hot is higher indexes, cold is lower indexes
+color_gradient=(21 27 45 50 84 82 118 190 214 202 196)
+
+# Get the temperture of all the disks
+mapfile -t hddtemps < <(hddtemp -q /dev/sd[a-z] 2>/dev/null | sed -r 's/\/dev\/([a-z]{3}).+\s([0-9]+)°C$/\1 \2/')
+
+declare -A temps
+
+for disk in "${hddtemps[@]}"
+do
+  IFS=' ' read -ra temp <<< "$disk"
+  temps[${temp[0]}]="${temp[1]}"
+done
+
+# for debugging
+#for i in "${!temps[@]}"
+#do
+#  echo "key  : $i"
+#  echo "value: ${temps[$i]}"
+#done
+
+line1=""
+line2=""
+
+# Disk temps
+for disk in "${disks[@]}"
+do
+  color_index=$(( ${temps[$disk]} - $target_temp + 5 ))
+
+  # min/max bounds for color_index max 10 min 0
+  color_index=$((color_index<10 ? color_index : 10))
+  color_index=$((color_index>0 ? color_index : 0))
+
+  color="${color_gradient[$color_index]}"
+
+  line1+="\e[38;5;${color}m$disk \e[0m" # device name
+  line2+="\e[38;5;${color}m${temps[$disk]}C \e[0m" # temp
+done
+
+echo -e "\e[${color_primary}mHard Disk Temperatures\e[0m"
+echo -e "$line1"
+echo -e "$line2"

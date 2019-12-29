@@ -12,7 +12,7 @@ color_primary=${color_primary:="36"}
 
 # zpool usage
 mapfile -t zpools < <(zpool list -Ho name,cap,size)
-echo -e "\n\e[${color_primary}mDisk usage\e[0m"
+echo -e "\e[${color_primary}mDisk usage:\e[0m"
 
 for line in "${zpools[@]}"; do
 
